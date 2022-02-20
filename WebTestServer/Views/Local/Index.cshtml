@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Local";
+}
+@model Handler.ResponseModel
+
+<div class="row">
+    <div class="col col-4">
+        <div>
+            <form>
+                <label>Valute codes (comma-separated)</label>
+                <input type="text" style="width:100%;" value="USD,EUR,GBP,CHF"/>
+                <a href="#" class="mt-1 btn btn-primary">Get</a><span class="hidden ml-2 waiting">Waiting....</span>
+            </form>
+        </div>
+        
+        <div class="alert alert-primary mt-1 hidden" role="alert"></div>
+        <div class="alert alert-danger mt-1 hidden" role="alert"></div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col col-12 data"></div>
+</div>
+
+<div class="row mt-1">
+    <div class="col col-12 headers"></div>
+</div>
+
+<script>
+$("a").click(function () {
+    getResponse('@Url.Action("GetCourse")');
+});
+</script>

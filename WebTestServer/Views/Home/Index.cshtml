@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var p = Process.GetCurrentProcess();
+}
+@using System.Diagnostics
+@model HomeIndexModel
+
+<div class="row">
+    <div class="col col-4">
+        <table>
+            <tr>
+                <th colspan="2">System information</th>
+            </tr>
+            <tr>
+                <td>Host name</td>
+                <td>@Environment.GetEnvironmentVariable("COMPUTERNAME")</td>
+            </tr>
+            <tr>
+                <td>ProcessorCount</td>
+                <td>@Environment.ProcessorCount</td>
+            </tr>
+            <tr>
+                <td>GC.GetTotalMemory</td>
+                <td>@(GC.GetTotalMemory(false) / 1048576) MB</td>
+            </tr>
+            <tr>
+                <td>VirtualMemory</td>
+                <td>@(p.VirtualMemorySize64 / 1048576) MB</td>
+            </tr>
+            <tr>
+                <td>MaxWorkingSet</td>
+                <td>@(p.MaxWorkingSet.ToInt64() / 1024) KB</td>
+            </tr>
+            <tr>
+                <td>WorkingSet</td>
+                <td>@(p.WorkingSet64 / 1048576) MB</td>
+            </tr>
+        </table>
+        
+        <table class="mt-2">
+            <tr>
+                <th colspan="2">Network interfaces</th>
+            </tr>
+            @foreach (var key in Model.Interfaces)
+            {
+                <tr>
+                    <td>@key.Name</td>
+                    <td>
+                        <pre>@Html.Raw(key.Addresses)</pre>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col col-8">
+            <table>
+                <tr>
+                    <th colspan="2">Request headers</th>
+                </tr>
+                @foreach (var key in Model.RequestHeaders)
+                {
+                    <tr>
+                        <td style="width: 20em">@key.Key</td>
+                        <td>@Html.Raw(key.Value)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col col-12">
+        <table>
+            <tr>
+                <th colspan="2">Environment variables</th>
+            </tr>
+            @foreach (var key in Model.Env.OrderBy(p => p.Key))
+            {
+                <tr>
+                    <td style="width: 20em">@key.Key</td>
+                    <td>@key.Value</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

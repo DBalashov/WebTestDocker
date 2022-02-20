@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <RootNamespace>WebTest</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Handler\Handler.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\docker-compose.yml">
+        <Link>docker-compose.yml</Link>
+      </Content>
+      <Content Include="..\WebTestServer.dockerfile">
+        <Link>WebTestServer.dockerfile</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>
