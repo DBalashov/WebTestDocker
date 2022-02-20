@@ -24,6 +24,9 @@
       <Content Include="..\docker-compose.yml">
         <Link>docker-compose.yml</Link>
       </Content>
+      <Content Include="..\readme.md">
+        <Link>readme.md</Link>
+      </Content>
       <Content Include="..\WebTestServer.dockerfile">
         <Link>WebTestServer.dockerfile</Link>
       </Content>
