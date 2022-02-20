@@ -1,4 +1,5 @@
 using System;
+using App.Metrics;
 using Handler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,9 @@ namespace WebTest
             services.AddControllersWithViews();
 #endif
 
+            services.AddAppMetricsSystemMetricsCollector();
             services.AddScoped<CoursesHandler>();
+            services.AddSingleton<MetricHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -31,7 +34,7 @@ namespace WebTest
                 app.UseDeveloperExceptionPage();
             else
                 app.UseExceptionHandler("/Home/Error");
- 
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();

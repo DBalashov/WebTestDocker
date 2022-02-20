@@ -21,7 +21,9 @@ namespace WebTestService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddAppMetricsSystemMetricsCollector();
             services.AddScoped<CoursesHandler>();
+            services.AddSingleton<MetricHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
