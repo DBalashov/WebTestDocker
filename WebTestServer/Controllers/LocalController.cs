@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Handler;
@@ -21,19 +22,28 @@ namespace WebTest.Controllers
 
         public async Task<ResponseModel> GetCourse(string ids)
         {
+            var sw = Stopwatch.StartNew();
             Thread.Sleep(new Random().Next(200));
             try
             {
-                var _ids = ids.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var _ids   = ids.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 var result = new ResponseModel(await ch.Get(_ids), Request.Headers);
-                mh.Increment(MetricHandler.RequestSuccess);
-                mh.Increment(MetricHandler.RequestCount);
+
+                mh.Set(MetricHandler.LocalItemsCount, result.Data.Length);
+                mh.Increment(MetricHandler.LocalRequestSuccess);
+                mh.Increment(MetricHandler.LocalRequestCount);
+                mh.Set(MetricHandler.LocalRequestDuration, sw.ElapsedMilliseconds);
+                
                 return result;
             }
             catch (Exception e)
             {
-                mh.Increment(MetricHandler.RequestFailed);
+                mh.Increment(MetricHandler.LocalRequestFailed);
                 return new ResponseModel((e.InnerException ?? e).Message, Request.Headers);
+            }
+            finally
+            {
+                sw.Stop();
             }
         }
     }

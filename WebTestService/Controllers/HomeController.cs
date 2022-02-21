@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Handler;
@@ -8,6 +9,8 @@ namespace WebTestService.Controllers
 {
     public class HomeController : Controller
     {
+        static string UID = Guid.NewGuid().ToString();
+
         readonly CoursesHandler ch;
         readonly MetricHandler  mh;
 
@@ -26,13 +29,17 @@ namespace WebTestService.Controllers
                     .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 var result = new ResponseModel(await ch.Get(_ids), Request.Headers);
-                mh.Increment(MetricHandler.RequestSuccess);
-                mh.Increment(MetricHandler.RequestCount);
+                result.RequestHeaders = result.RequestHeaders.Append(new RequestHeader() { Name = "X-Host-UID", Value = UID }).ToArray();
+
+                mh.Set(MetricHandler.LocalItemsCount, result.Data.Length);
+                mh.Increment(MetricHandler.LocalRequestSuccess);
+                mh.Increment(MetricHandler.LocalRequestCount);
+
                 return result;
             }
             catch (Exception e)
             {
-                mh.Increment(MetricHandler.RequestFailed);
+                mh.Increment(MetricHandler.LocalRequestFailed);
                 return new ResponseModel((e.InnerException ?? e).Message, Request.Headers);
             }
         }

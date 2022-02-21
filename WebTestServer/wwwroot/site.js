@@ -40,5 +40,6 @@ function convertHeaders(r) {
     for (var i = 0; i < r.length; i++) {
         items.push("<tr><td style='width:20em'>" + r[i].name + "</td><td>" + r[i].value + "</td></tr>");
     }
+
     return "<table>" + items.join('') + "</table>";
 }

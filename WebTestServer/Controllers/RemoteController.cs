@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Handler;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 #pragma warning disable CS8603
 
@@ -14,17 +13,20 @@ namespace WebTest.Controllers
 {
     public class RemoteController : Controller
     {
-        readonly string RemoteHostName;
+        readonly string        RemoteHostName;
+        readonly MetricHandler mh;
 
-        public RemoteController(IConfiguration config)
+        public RemoteController(IConfiguration config, MetricHandler mh)
         {
             RemoteHostName = config["WebTestServiceAddress"];
+            this.mh        = mh;
         }
 
         public IActionResult Index() => View();
 
         public async Task<ResponseModel> GetCourse(string ids)
         {
+            var       sw     = Stopwatch.StartNew();
             using var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(3);
             try
@@ -35,11 +37,21 @@ namespace WebTest.Controllers
                     r.Error = "Error from remote service: " + r.Error;
                 }
 
+                mh.Set(MetricHandler.RemoteItemsCount, r.Data.Length);
+                mh.Increment(MetricHandler.RemoteRequestSuccess);
+                mh.Increment(MetricHandler.RemoteRequestCount);
+                mh.Set(MetricHandler.LocalRequestDuration, sw.ElapsedMilliseconds);
+
                 return r;
             }
             catch (Exception e)
             {
+                mh.Increment(MetricHandler.RemoteRequestFailed);
                 return new ResponseModel((e.InnerException ?? e).Message, Request.Headers);
+            }
+            finally
+            {
+                sw.Stop();
             }
         }
     }
