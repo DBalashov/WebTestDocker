@@ -26,6 +26,16 @@ namespace WebTestService.Controllers
 
         public async Task<ResponseModel> GetCourse(string ids, [FromServices] IDatabaseHandler db)
         {
+            switch (ids)
+            {
+                case "crash":
+                    Environment.Exit(-1);
+                    break;
+              
+                case "500":
+                    throw new InvalidOperationException("FAILED INPUT");
+            }
+
             Thread.Sleep(new Random().Next(200)); // fake delay for emulate slow network / long response 
             try
             {

@@ -23,6 +23,16 @@ namespace WebTest.Controllers
 
         public async Task<ResponseModel> GetCourse(string ids, [FromServices] IDatabaseHandler db)
         {
+            switch (ids)
+            {
+                case "crash":
+                    Environment.Exit(-1);
+                    break;
+              
+                case "500":
+                    throw new InvalidOperationException("FAILED INPUT");
+            }
+            
             var sw = Stopwatch.StartNew();
             Thread.Sleep(new Random().Next(200));
             try
