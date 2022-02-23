@@ -42,6 +42,7 @@ namespace WebTestService
                            c.ReportingEnabled = true;
                        });
                    })
+                   .ConfigureAppConfiguration(cfg => cfg.AddEnvironmentVariables())
                    .UseStartup<Startup>()
                    .Build();
     }

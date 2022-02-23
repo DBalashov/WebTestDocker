@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.DependencyInjection
+@using Handler
+@{
+    var dbEnabled = ViewContext.HttpContext.RequestServices.GetRequiredService<IDatabaseHandler>().Enabled;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -27,6 +32,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Remote" asp-action="Index">Remote</a>
                     </li>
+                    @if (dbEnabled)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Database" asp-action="Index">Request log</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

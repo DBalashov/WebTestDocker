@@ -40,7 +40,7 @@ namespace WebTest.Controllers
                 mh.Set(MetricHandler.RemoteItemsCount, r.Data.Length);
                 mh.Increment(MetricHandler.RemoteRequestSuccess);
                 mh.Increment(MetricHandler.RemoteRequestCount);
-                mh.Set(MetricHandler.LocalRequestDuration, sw.ElapsedMilliseconds);
+                mh.Set(MetricHandler.RemoteRequestDuration, sw.ElapsedMilliseconds);
 
                 return r;
             }

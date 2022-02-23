@@ -16,6 +16,7 @@
       <PackageReference Include="App.Metrics.Core" Version="4.3.0" />
       <PackageReference Include="App.Metrics.Prometheus" Version="4.3.0" />
       <PackageReference Include="App.Metrics.Reporting.Console" Version="4.3.0" />
+      <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>

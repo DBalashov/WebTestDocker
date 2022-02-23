@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebTest.Models;
@@ -14,10 +13,7 @@ namespace WebTest.Controllers
     {
         readonly ILogger<HomeController> logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            this.logger = logger;
-        }
+        public HomeController(ILogger<HomeController> logger) => this.logger = logger;
 
         public IActionResult Index()
         {

@@ -4,25 +4,29 @@ using System.Threading;
 using System.Threading.Tasks;
 using Handler;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace WebTestService.Controllers
 {
     public class HomeController : Controller
     {
-        static string UID = Guid.NewGuid().ToString();
+        static string UID = Environment.GetEnvironmentVariable("HOSTNAME");
 
         readonly CoursesHandler ch;
         readonly MetricHandler  mh;
 
         public HomeController(CoursesHandler ch, MetricHandler mh)
         {
+            if (string.IsNullOrWhiteSpace(UID))
+                UID = Guid.NewGuid().ToString();
+
             this.ch = ch;
             this.mh = mh;
         }
 
-        public async Task<ResponseModel> GetCourse(string ids)
+        public async Task<ResponseModel> GetCourse(string ids, [FromServices] IDatabaseHandler db)
         {
-            Thread.Sleep(new Random().Next(200));
+            Thread.Sleep(new Random().Next(200)); // fake delay for emulate slow network / long response 
             try
             {
                 var _ids = (ids ?? throw new ArgumentNullException(nameof(ids)))
@@ -34,6 +38,13 @@ namespace WebTestService.Controllers
                 mh.Set(MetricHandler.LocalItemsCount, result.Data.Length);
                 mh.Increment(MetricHandler.LocalRequestSuccess);
                 mh.Increment(MetricHandler.LocalRequestCount);
+
+                db.Put(new DBLogItem()
+                {
+                    data = JsonConvert.SerializeObject(result),
+                    host = UID,
+                    dt   = DateTime.UtcNow
+                });
 
                 return result;
             }

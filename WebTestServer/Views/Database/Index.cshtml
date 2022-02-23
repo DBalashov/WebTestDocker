@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Local";
+}
+@model LogItemModel[]
+<style>
+    th.c, td.c { text-align: center }
+    th,td { padding: 2px 6px; }
+    span.code { }
+    span.value { color: blue; }
+</style>
+
+<div class="row">
+    <div class="col col-12">
+        <table>
+            <tr>
+                <th style="width:12em" class="c">Date/Time (UTC)</th>
+                <th style="width:20em">Host</th>
+                <th>Data</th>
+            </tr>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td class="c">@m.DT</td>
+                    <td>@m.Host</td>
+                    <td>@Html.Raw(m.Data)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

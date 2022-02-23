@@ -6,9 +6,8 @@ namespace WebTest.Models
 {
     public class HomeIndexModel
     {
-        public Dictionary<string, string> Env        { get; set; }
-        public NetworkInterfaceItem[]     Interfaces { get; set; }
-
+        public Dictionary<string, string> Env            { get; set; }
+        public NetworkInterfaceItem[]     Interfaces     { get; set; }
         public Dictionary<string, string> RequestHeaders { get; set; }
     }
 

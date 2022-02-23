@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Handler;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace WebTest.Controllers
 {
@@ -20,7 +21,7 @@ namespace WebTest.Controllers
 
         public IActionResult Index() => View();
 
-        public async Task<ResponseModel> GetCourse(string ids)
+        public async Task<ResponseModel> GetCourse(string ids, [FromServices] IDatabaseHandler db)
         {
             var sw = Stopwatch.StartNew();
             Thread.Sleep(new Random().Next(200));
@@ -33,6 +34,13 @@ namespace WebTest.Controllers
                 mh.Increment(MetricHandler.LocalRequestSuccess);
                 mh.Increment(MetricHandler.LocalRequestCount);
                 mh.Set(MetricHandler.LocalRequestDuration, sw.ElapsedMilliseconds);
+
+                db.Put(new DBLogItem()
+                {
+                    data = JsonConvert.SerializeObject(result),
+                    host = "LOCAL",
+                    dt   = DateTime.UtcNow
+                });
                 
                 return result;
             }

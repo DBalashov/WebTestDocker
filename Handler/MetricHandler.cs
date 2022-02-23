@@ -19,28 +19,15 @@ namespace Handler
 
         public static TimerOptions RemoteRequestDuration = new() { Name = "remote_request_duration", MeasurementUnit = Unit.Custom("ms") };
         public static TimerOptions LocalRequestDuration  = new() { Name = "local_request_duration", MeasurementUnit  = Unit.Custom("ms") };
-
-
+        
         readonly IMetricsRoot metrics;
 
-        public MetricHandler(IMetricsRoot metrics)
-        {
-            this.metrics = metrics;
-        }
+        public MetricHandler(IMetricsRoot metrics) => this.metrics = metrics;
 
-        public void Increment(CounterOptions counter)
-        {
-            metrics.Measure.Counter.Increment(counter);
-        }
+        public void Increment(CounterOptions counter) => metrics.Measure.Counter.Increment(counter);
 
-        public void Set(GaugeOptions counter, int value)
-        {
-            metrics.Measure.Gauge.SetValue(counter, value);
-        }
+        public void Set(GaugeOptions counter, int value) => metrics.Measure.Gauge.SetValue(counter, value);
 
-        public void Set(TimerOptions counter, long value)
-        {
-            metrics.Measure.Timer.Time(counter, value);
-        }
+        public void Set(TimerOptions counter, long value) => metrics.Measure.Timer.Time(counter, value);
     }
 }
